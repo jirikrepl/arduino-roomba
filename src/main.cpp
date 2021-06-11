@@ -1,11 +1,12 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
-const int START = 128;
-const int FULL = 132;
-const int STOP = 173;
-const int SENSORS = 142;
-const int BUMPS_AND_WHEELS = 7;
+const byte START = 128;
+const byte FULL = 132;
+const byte STOP = 173;
+const byte DRIVE_PWM = 146;
+const byte SENSORS = 142;
+const byte BUMPS_AND_WHEELS = 7;
 
 const int rxPin=10;
 const int txPin=11;
@@ -28,6 +29,15 @@ void setup() {
     Roomba.write(START);
     Roomba.write(FULL);
     delay(100);
+
+    const int rightPwm = 64;
+    const int leftPwm = -64;
+    Roomba.write(DRIVE_PWM);
+    Roomba.write(highByte(rightPwm));
+    Roomba.write(lowByte(rightPwm));
+    Roomba.write(highByte(leftPwm));
+    Roomba.write(lowByte(leftPwm));
+    delay(1000);
 
     Serial.println("roomba returned: " + (String)readSensor(BUMPS_AND_WHEELS));
 
