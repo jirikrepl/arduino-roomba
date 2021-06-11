@@ -7,6 +7,7 @@ const byte STOP = 173;
 const byte DRIVE_PWM = 146;
 const byte SENSORS = 142;
 const byte BUMPS_AND_WHEELS = 7;
+const byte LIGHT_BUMPER = 45;
 
 const int rxPin=10;
 const int txPin=11;
@@ -47,4 +48,9 @@ void setup() {
 
 void loop() {
     // write your code here
+    byte bump = readSensor(LIGHT_BUMPER);
+    if (bump > 0) {
+        Serial.println("roomba bump: " + (String)bump);
+    }
+    delay(500);
 }
