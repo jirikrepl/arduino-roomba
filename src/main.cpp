@@ -14,6 +14,14 @@ const int txPin=11;
 
 SoftwareSerial Roomba(rxPin,txPin);
 
+void drivePwm(int leftPwm, int rightPwm) {
+    Roomba.write(DRIVE_PWM);
+    Roomba.write(highByte(leftPwm));
+    Roomba.write(lowByte(leftPwm));
+    Roomba.write(highByte(rightPwm));
+    Roomba.write(lowByte(rightPwm));
+}
+
 byte readSensor(int packetId) {
     Roomba.write(SENSORS);
     Roomba.write(packetId);
@@ -31,13 +39,7 @@ void setup() {
     Roomba.write(FULL);
     delay(100);
 
-    const int rightPwm = 64;
-    const int leftPwm = -64;
-    Roomba.write(DRIVE_PWM);
-    Roomba.write(highByte(rightPwm));
-    Roomba.write(lowByte(rightPwm));
-    Roomba.write(highByte(leftPwm));
-    Roomba.write(lowByte(leftPwm));
+    drivePwm(64, -64);
     delay(1000);
 
     Serial.println("roomba returned: " + (String)readSensor(BUMPS_AND_WHEELS));
