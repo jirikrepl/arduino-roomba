@@ -6,11 +6,12 @@ const byte FULL = 132;
 const byte STOP = 173;
 const byte DRIVE_PWM = 146;
 const byte SENSORS = 142;
-const byte BUMPS_AND_WHEELS = 7;
-const byte LIGHT_BUMPER = 45;
+const byte BUMPS_AND_WHEELS_ID = 7;
+const byte LIGHT_BUMPER_ID = 45;
+const byte BUTTONS_ID = 18;
 
-const int rxPin=10;
-const int txPin=11;
+const int rxPin = 10;
+const int txPin = 11;
 const int speed = 96;
 
 SoftwareSerial Roomba(rxPin,txPin);
@@ -40,7 +41,7 @@ void setup() {
     Roomba.write(FULL);
     delay(100);
 
-    Serial.println("roomba returned: " + (String)readSensor(BUMPS_AND_WHEELS));
+    Serial.println("roomba returned: " + (String)readSensor(BUMPS_AND_WHEELS_ID));
 
     Roomba.write(STOP);
     Serial.println("setup completed!");
@@ -48,7 +49,10 @@ void setup() {
 
 void loop() {
     // write your code here
-    byte bump = readSensor(LIGHT_BUMPER);
+    byte buttons = readSensor(BUTTONS_ID);
+    Serial.println(buttons);
+
+    byte bump = readSensor(LIGHT_BUMPER_ID);
     if (bump > 0) {
         Serial.println("roomba bump: " + (String)bump);
 
