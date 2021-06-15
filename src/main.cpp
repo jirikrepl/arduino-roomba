@@ -41,20 +41,20 @@ void setup() {
     Roomba.write(FULL);
     delay(100);
 
-    Serial.println("roomba returned: " + (String)readSensor(BUMPS_AND_WHEELS_ID));
-
-    Roomba.write(STOP);
+    Serial.println("bumps and wheels: " + (String)readSensor(BUMPS_AND_WHEELS_ID));
     Serial.println("setup completed!");
 }
 
 void loop() {
     // write your code here
-    byte buttons = readSensor(BUTTONS_ID);
-    Serial.println(buttons);
+    if (readSensor(BUTTONS_ID) == 1) {
+        drivePwm(0, 0);
+        Roomba.write(STOP);
+    }
 
-    byte bump = readSensor(LIGHT_BUMPER_ID);
-    if (bump > 0) {
-        Serial.println("roomba bump: " + (String)bump);
+    byte light = readSensor(LIGHT_BUMPER_ID);
+    if (light > 0) {
+        Serial.println("roomba light: " + (String)light);
 
         if (random(2)) {
             Serial.println("rotate left");
