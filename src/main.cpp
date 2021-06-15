@@ -10,9 +10,12 @@ const byte BUMPS_AND_WHEELS_ID = 7;
 const byte LIGHT_BUMPER_ID = 45;
 const byte BUTTONS_ID = 18;
 
+const byte CLEAN_BUTTON_FLAG = 1;
+const byte WHEEL_DROP_BOTH_FLAG = 12;
+
 const int rxPin = 10;
 const int txPin = 11;
-const int speed = 96;
+const int drive_speed = 96;
 
 SoftwareSerial Roomba(rxPin,txPin);
 
@@ -40,14 +43,12 @@ void setup() {
     Roomba.write(START);
     Roomba.write(FULL);
     delay(100);
-
-    Serial.println("bumps and wheels: " + (String)readSensor(BUMPS_AND_WHEELS_ID));
     Serial.println("setup completed!");
 }
 
 void loop() {
     // write your code here
-    if (readSensor(BUTTONS_ID) == 1) {
+    if (readSensor(BUTTONS_ID) == CLEAN_BUTTON_FLAG || readSensor(BUMPS_AND_WHEELS_ID) == WHEEL_DROP_BOTH_FLAG) {
         drivePwm(0, 0);
         Roomba.write(STOP);
     }
@@ -58,14 +59,14 @@ void loop() {
 
         if (random(2)) {
             Serial.println("rotate left");
-            drivePwm(speed, -speed);
+            drivePwm(drive_speed, -drive_speed);
         } else {
             Serial.println("rotate right");
-            drivePwm(-speed, speed);
+            drivePwm(-drive_speed, drive_speed);
         }
         delay(2000);
         Serial.println("driving...");
-        drivePwm(speed, speed);
+        drivePwm(drive_speed, drive_speed);
     }
     delay(500);
 }
