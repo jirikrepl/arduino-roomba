@@ -11,6 +11,7 @@ const byte LIGHT_BUMPER = 45;
 
 const int rxPin=10;
 const int txPin=11;
+const int speed = 96;
 
 SoftwareSerial Roomba(rxPin,txPin);
 
@@ -39,9 +40,6 @@ void setup() {
     Roomba.write(FULL);
     delay(100);
 
-    drivePwm(64, -64);
-    delay(1000);
-
     Serial.println("roomba returned: " + (String)readSensor(BUMPS_AND_WHEELS));
 
     Roomba.write(STOP);
@@ -53,6 +51,17 @@ void loop() {
     byte bump = readSensor(LIGHT_BUMPER);
     if (bump > 0) {
         Serial.println("roomba bump: " + (String)bump);
+
+        if (random(2)) {
+            Serial.println("rotate left");
+            drivePwm(speed, -speed);
+        } else {
+            Serial.println("rotate right");
+            drivePwm(-speed, speed);
+        }
+        delay(2000);
+        Serial.println("driving...");
+        drivePwm(speed, speed);
     }
     delay(500);
 }
